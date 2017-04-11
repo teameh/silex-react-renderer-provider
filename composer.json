@@ -1,0 +1,27 @@
+{
+  "name": "teameh/silex-react-renderer-provider",
+  "description": "Client and Server-side react rendering as a Silex service provider",
+  "type": "library",
+  "homepage": "https://github.com/teameh/silex-react-renderer-provider",
+  "keywords": ["react", "reactjs", "isomorphic", "twig", "silex"],
+  "require": {
+    "php": ">=5.5.0",
+    "silex/silex": "^2.0",
+    "twig/twig": "^1.20|^2.0",
+    "limenius/react-renderer": "^0.12.0"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tieme van Veen",
+      "email": "tiemevanveen@hotmail.com",
+      "homepage": "http://tiemevanveen.nl"
+
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Teameh\\Silex\\Services\\React\\": "src/"
+    }
+  }
+}
