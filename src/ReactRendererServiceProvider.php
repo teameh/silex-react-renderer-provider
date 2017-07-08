@@ -11,6 +11,7 @@
 
 namespace Teameh\Silex\Services\React;
 
+use Limenius\ReactRenderer\Context\SymfonyContextProvider;
 use Limenius\ReactRenderer\Renderer\ExternalServerReactRenderer;
 use Limenius\ReactRenderer\Renderer\PhpExecJsReactRenderer;
 use Limenius\ReactRenderer\Twig\ReactRenderExtension;
@@ -75,6 +76,7 @@ class ReactRendererServiceProvider implements ServiceProviderInterface, Bootable
                 return new ExternalServerReactRenderer(
                     $conf['socket_server_path'],
                     isset($conf['fail_loud']) ? $conf['fail_loud'] : $app['debug'],
+                    new SymfonyContextProvider($app['request_stack']),
                     isset($conf['logger']) ? $conf['logger'] : null
                 );
             }
@@ -86,6 +88,7 @@ class ReactRendererServiceProvider implements ServiceProviderInterface, Bootable
             return new PhpExecJsReactRenderer(
                 $conf['server_bundle_path'],
                 isset($conf['fail_loud']) ? $conf['fail_loud'] : $app['debug'],
+                new SymfonyContextProvider($app['request_stack']),
                 isset($conf['logger']) ? $conf['logger'] : null
             );
         };
@@ -95,6 +98,7 @@ class ReactRendererServiceProvider implements ServiceProviderInterface, Bootable
 
             return new ReactRenderExtension(
                 $app['react.renderer'],
+                new SymfonyContextProvider($app['request_stack']),
                 isset($app['react.default_rendering']) ? $app['react.default_rendering'] : 'both',
                 isset($conf['trace']) ? $conf['trace'] : $app['debug']
             );
