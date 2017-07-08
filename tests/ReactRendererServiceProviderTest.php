@@ -3,6 +3,9 @@
 namespace Teameh\Silex\Services\React\Tests;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Tests\RequestStackTest;
 use Teameh\Silex\Services\React\ReactRendererServiceProvider;
 
 /**
@@ -48,7 +51,10 @@ class ReactRendererServiceProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testUseRightRenderer()
     {
+        // PhpExecJs render
         $app1 = new Application();
+        $app1['request_stack']->push(Request::create('/'));
+
         $app1->register(new ReactRendererServiceProvider(), [
             'react.serverside_rendering' => [
                 'server_bundle_path' => __DIR__ . '/Fixtures/server-bundle-react.js'
@@ -57,7 +63,10 @@ class ReactRendererServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceof('Limenius\ReactRenderer\Renderer\PhpExecJsReactRenderer', $app1['react.renderer']);
 
+        // External rendering
         $app2 = new Application();
+        $app2['request_stack']->push(Request::create('/'));
+
         $app2->register(new ReactRendererServiceProvider(), [
             'react.serverside_rendering' => [
                 'mode' => 'external',
@@ -71,6 +80,8 @@ class ReactRendererServiceProviderTest extends \PHPUnit_Framework_TestCase
     public function testReactBundle()
     {
         $app = new Application();
+        $app['request_stack']->push(Request::create('/'));
+
         $app->register(new ReactRendererServiceProvider(), [
             'react.default_rendering' => 'server_side',
             'react.serverside_rendering' => [
@@ -82,7 +93,7 @@ class ReactRendererServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $app['react.renderer']->render('MyApp', '{msg:"It Works!"}', 1, null, false));
 
         $expected .= "\n" . '<script id="consoleReplayLog">'."\n";
-        $expected .= 'console.log.apply(console, ["[SERVER] RENDERED MyApp to dom node with id: 1 with railsContext:","{\"serverSide\":true}"]);'."\n";
+        $expected .= 'console.log.apply(console, ["[SERVER] RENDERED MyApp to dom node with id: 1 with railsContext:","{\"serverSide\":true,\"href\":\"http://localhost/\",\"location\":\"/\",\"scheme\":\"http\",\"host\":\"localhost\",\"port\":80,\"base\":\"\",\"pathname\":\"/\",\"search\":null}"]);'."\n";
         $expected .= '</script>';
         $this->assertEquals($expected, $app['react.renderer']->render('MyApp', '{msg:"It Works!"}', 1, null, true));
     }
