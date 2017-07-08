@@ -28,6 +28,8 @@ class ReactRendererServiceProvider implements ServiceProviderInterface, Bootable
 
 
     /**
+     * @param Container $app
+     *
      * Configuration options are:
      *
      * - react.default_rendering:      string, either 'client_side', 'server_side' or 'both'
@@ -65,11 +67,20 @@ class ReactRendererServiceProvider implements ServiceProviderInterface, Bootable
         $app['react.renderer'] = function () use ($app) {
             $conf = $app['react.serverside_rendering'];
             if (isset($conf['mode']) && $conf['mode'] === 'external') {
+
+                if(!isset($conf['socket_server_path'])) {
+                    throw new \InvalidArgumentException('socket_server_path should be set');
+                }
+
                 return new ExternalServerReactRenderer(
                     $conf['socket_server_path'],
                     isset($conf['fail_loud']) ? $conf['fail_loud'] : $app['debug'],
                     isset($conf['logger']) ? $conf['logger'] : null
                 );
+            }
+
+            if(!isset($conf['server_bundle_path'])) {
+                throw new \InvalidArgumentException('server_bundle_path should be set');
             }
 
             return new PhpExecJsReactRenderer(
