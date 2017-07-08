@@ -26,6 +26,40 @@ class ReactRendererServiceProvider implements ServiceProviderInterface, Bootable
         $app['twig']->addExtension($app['react.extension']);
     }
 
+
+    /**
+     * Configuration options are:
+     *
+     * - react.default_rendering:      string, either 'client_side', 'server_side' or 'both'
+     *
+     * - react.serverside_rendering:
+     *   - fail_loud                   bool, defaults to $app['debug']
+     *                                   In case of error in server-side rendering, throw exception
+     *
+     *   - trace                       bool, defaults to $app['debug']
+     *                                   Replay every console.log message produced during server-side rendering in the
+     *                                   JavaScript console. Note that if enabled it will throw a (harmless) React warning
+     *
+     *   - mode                        string
+     *                                   Mode can be `"phpexecjs"` (to execute Js from PHP using PhpExecJs),
+     *                                   or `"external"` (to rely on an external node.js server) Default is `"phpexecjs"`
+     *
+     *   - string server_bundle_path   string (Only used with mode `phpexecjs`)
+     *                                   Location of the server bundle, that contains the concatenated javascript bundle.
+     *                                   This bundle should contain the ReactOnRails.register() code
+     *
+     *   - socket_server_path          string (Only used with mode `external`)
+     *                                   Location of the socket to communicate with a dummy node.js server.
+     *                                   Socket type must be acceptable by php function stream_socket_client.
+     *                                   Example unix://node.sock, tcp://127.0.0.1:5000
+     *                                   More info: http://php.net/manual/en/function.stream-socket-client.php
+     *                                   Example of node server:
+     *                                   https://github.com/Limenius/symfony-react-sandbox/blob/master/app/Resources/node-server/server.js
+     *
+     *   - logger                      \Psr\Log\LoggerInterface
+     *                                   Logger used for errors
+     *
+     */
     public function register(Container $app)
     {
         $app['react.renderer'] = function () use ($app) {
