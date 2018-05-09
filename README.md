@@ -1,6 +1,8 @@
 # Silex React Renderer Service Provider 
 
-**WARNING**: Silex and this project are not maintained any more. Ends of life of Silex is set to June 2018. Read more on [Symfony's blog](https://symfony.com/blog/the-end-of-silex).
+**WARNING**: Silex and this project are not maintained any more. Ends of life of Silex is set to June 2018. 
+
+Read more on [Symfony's blog](https://symfony.com/blog/the-end-of-silex).
 
 # ReactRenderer
 
