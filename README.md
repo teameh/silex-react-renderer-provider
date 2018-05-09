@@ -1,5 +1,7 @@
 # Silex React Renderer Service Provider 
 
+**WARNING**: Silex and this project are not maintained any more. Ends of life of Silex is set to June 2018. Read more on [Symfony's blog](https://symfony.com/blog/the-end-of-silex).
+
 # ReactRenderer
 
 This provider integrates [ReactRenderer](https://github.com/Limenius/ReactRenderer) in your Silex project. This lets you implement your frontend with React.js and let php do the server-side rendering, allowing the development of universal (isomorphic) applications.
